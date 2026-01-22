@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.9'
+}
+
+group = 'com.github.dzmitryivaniuta'
+version = '0.1.0'
+
+description = 'Daily snapshot CSV ingestion -> multi-feed delta generator for loans analytics'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Apply Spring Boot BOM to ALL configurations that need managed versions
+    def bootBom = platform("org.springframework.boot:spring-boot-dependencies:3.5.9")
+    implementation bootBom
+    testImplementation bootBom
+    annotationProcessor bootBom
+    testAnnotationProcessor bootBom
+
+    // Testcontainers BOM (stable, explicit)
+    testImplementation platform("org.testcontainers:testcontainers-bom:1.20.4")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.flywaydb:flyway-core'
+    implementation "org.flywaydb:flyway-database-postgresql"
+
+    // Needed at compile-time (PGConnection/CopyManager)
+    implementation 'org.postgresql:postgresql'
+
+    // Lombok (explicit version to avoid "empty version" issues)
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+    testCompileOnly 'org.projectlombok:lombok:1.18.42'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

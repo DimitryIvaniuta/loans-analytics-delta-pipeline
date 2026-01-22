@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: loans-analytics-delta-pipeline
+  datasource:
+    url: jdbc:postgresql://localhost:5452/loans
+    username: loans
+    password: loans
+    hikari:
+      maximum-pool-size: 10
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+
+loans:
+  ingestion:
+    input-dir: ./data
+    cli-enabled: false
+    enabled-feeds: ["LOAN_MASTER", "PAYMENT_TRANSACTION"]
