@@ -3,6 +3,8 @@ package com.github.dzmitryivaniuta.loansanalytics.ingest;
 import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedName;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -18,13 +20,18 @@ public class JobRunRepository {
 
     private final NamedParameterJdbcTemplate jdbc;
 
+    private static OffsetDateTime utc(Instant i) {
+        return i == null ? null : OffsetDateTime.ofInstant(i, ZoneOffset.UTC);
+    }
+
     public void startRun(UUID id, LocalDate asOf, Instant startedAt) {
         jdbc.update(
-                "INSERT INTO job_run (id, as_of_date, started_at, status) VALUES (:id, :asOf, :startedAt, :status)",
+                "INSERT INTO job_run (id, as_of_date, started_at, status) " +
+                        "VALUES (:id, :asOf, :startedAt, :status)",
                 new MapSqlParameterSource()
                         .addValue("id", id)
                         .addValue("asOf", asOf)
-                        .addValue("startedAt", startedAt)
+                        .addValue("startedAt", utc(startedAt))
                         .addValue("status", "STARTED")
         );
     }
@@ -34,7 +41,7 @@ public class JobRunRepository {
                 "UPDATE job_run SET finished_at=:finishedAt, status=:status, error_message=:msg WHERE id=:id",
                 new MapSqlParameterSource()
                         .addValue("id", id)
-                        .addValue("finishedAt", finishedAt)
+                        .addValue("finishedAt", utc(finishedAt))
                         .addValue("status", status)
                         .addValue("msg", errorMessage)
         );
@@ -48,7 +55,7 @@ public class JobRunRepository {
                         .addValue("runId", runId)
                         .addValue("feed", feed.name())
                         .addValue("file", sourceFile)
-                        .addValue("startedAt", startedAt)
+                        .addValue("startedAt", utc(startedAt))
                         .addValue("status", "STARTED")
         );
     }
@@ -70,7 +77,7 @@ public class JobRunRepository {
                 new MapSqlParameterSource()
                         .addValue("runId", runId)
                         .addValue("feed", feed.name())
-                        .addValue("finishedAt", finishedAt)
+                        .addValue("finishedAt", utc(finishedAt))
                         .addValue("status", status)
                         .addValue("staged", stagedRows)
                         .addValue("snap", snapshotRows)
@@ -91,7 +98,8 @@ public class JobRunRepository {
 
     public List<Map<String, Object>> listRuns(@Nullable LocalDate from, @Nullable LocalDate to, int limit) {
         return jdbc.queryForList(
-                "SELECT id, as_of_date, status, started_at, finished_at, error_message FROM job_run " +
+                "SELECT id, as_of_date, status, started_at, finished_at, error_message " +
+                        "FROM job_run " +
                         "WHERE (:from IS NULL OR as_of_date >= :from) AND (:to IS NULL OR as_of_date <= :to) " +
                         "ORDER BY started_at DESC LIMIT :limit",
                 new MapSqlParameterSource()
