@@ -1,7 +1,7 @@
-package com.github.dzmitryivaniuta.loansanalytics.ingest;
+package com.github.dimitryivaniuta.loansanalytics.ingest;
 
-import com.github.dzmitryivaniuta.loansanalytics.LoansIngestionProperties;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedDefinition;
+import com.github.dimitryivaniuta.loansanalytics.LoansIngestionProperties;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedDefinition;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;

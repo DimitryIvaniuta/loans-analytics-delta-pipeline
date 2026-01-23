@@ -1,4 +1,4 @@
-package com.github.dzmitryivaniuta.loansanalytics;
+package com.github.dimitryivaniuta.loansanalytics;
 
 import java.nio.file.Path;
 import java.time.LocalDate;

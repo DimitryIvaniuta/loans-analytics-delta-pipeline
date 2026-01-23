@@ -1,4 +1,4 @@
-package com.github.dzmitryivaniuta.loansanalytics.ingest.feed;
+package com.github.dimitryivaniuta.loansanalytics.ingest.feed;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

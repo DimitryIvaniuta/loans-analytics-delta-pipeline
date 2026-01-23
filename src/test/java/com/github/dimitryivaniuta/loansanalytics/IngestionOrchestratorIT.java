@@ -1,10 +1,10 @@
-package com.github.dzmitryivaniuta.loansanalytics;
+package com.github.dimitryivaniuta.loansanalytics;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.DeltaRepository;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.IngestionOrchestrator;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedName;
+import com.github.dimitryivaniuta.loansanalytics.ingest.DeltaRepository;
+import com.github.dimitryivaniuta.loansanalytics.ingest.IngestionOrchestrator;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedName;
 
 import java.io.IOException;
 import java.math.BigDecimal;

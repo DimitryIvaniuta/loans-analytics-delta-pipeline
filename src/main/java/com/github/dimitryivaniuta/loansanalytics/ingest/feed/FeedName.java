@@ -1,4 +1,4 @@
-package com.github.dzmitryivaniuta.loansanalytics.ingest.feed;
+package com.github.dimitryivaniuta.loansanalytics.ingest.feed;
 
 public enum FeedName {
     LOAN_MASTER,

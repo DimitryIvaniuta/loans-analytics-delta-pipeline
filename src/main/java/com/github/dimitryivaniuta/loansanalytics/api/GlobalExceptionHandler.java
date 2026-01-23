@@ -1,4 +1,4 @@
-package com.github.dzmitryivaniuta.loansanalytics.api;
+package com.github.dimitryivaniuta.loansanalytics.api;
 
 import java.time.Instant;
 import java.util.Map;

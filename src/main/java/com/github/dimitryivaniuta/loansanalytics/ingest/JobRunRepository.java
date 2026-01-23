@@ -1,6 +1,6 @@
-package com.github.dzmitryivaniuta.loansanalytics.ingest;
+package com.github.dimitryivaniuta.loansanalytics.ingest;
 
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedName;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedName;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -49,8 +49,15 @@ public class JobRunRepository {
 
     public void startFeed(UUID runId, FeedName feed, Instant startedAt, @Nullable String sourceFile) {
         jdbc.update(
-                "INSERT INTO job_run_feed (job_run_id, feed_name, source_file, started_at, status) " +
-                        "VALUES (:runId, :feed, :file, :startedAt, :status)",
+                """
+                INSERT INTO job_run_feed (job_run_id, feed_name, source_file, started_at, status)
+                VALUES (:runId, :feed, :file, :startedAt, :status)
+                ON CONFLICT (job_run_id, feed_name)
+                DO UPDATE SET
+                  source_file = EXCLUDED.source_file,
+                  started_at  = EXCLUDED.started_at,
+                  status      = EXCLUDED.status
+                """,
                 new MapSqlParameterSource()
                         .addValue("runId", runId)
                         .addValue("feed", feed.name())
@@ -100,11 +107,12 @@ public class JobRunRepository {
         return jdbc.queryForList(
                 "SELECT id, as_of_date, status, started_at, finished_at, error_message " +
                         "FROM job_run " +
-                        "WHERE (:from IS NULL OR as_of_date >= :from) AND (:to IS NULL OR as_of_date <= :to) " +
+                        "WHERE (:from IS NULL OR as_of_date >= CAST(:from AS DATE)) " +
+                        " AND (:to IS NULL OR as_of_date <= CAST(:to AS DATE)) " +
                         "ORDER BY started_at DESC LIMIT :limit",
                 new MapSqlParameterSource()
-                        .addValue("from", from)
-                        .addValue("to", to)
+                        .addValue("from", from, java.sql.Types.DATE)
+                        .addValue("to", to, java.sql.Types.DATE)
                         .addValue("limit", limit)
         );
     }

@@ -1,6 +1,6 @@
-package com.github.dzmitryivaniuta.loansanalytics;
+package com.github.dimitryivaniuta.loansanalytics;
 
-import com.github.dzmitryivaniuta.loansanalytics.ingest.IngestionOrchestrator;
+import com.github.dimitryivaniuta.loansanalytics.ingest.IngestionOrchestrator;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

@@ -1,9 +1,9 @@
-package com.github.dzmitryivaniuta.loansanalytics.ingest;
+package com.github.dimitryivaniuta.loansanalytics.ingest;
 
-import com.github.dzmitryivaniuta.loansanalytics.LoansIngestionProperties;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedDefinition;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedName;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedRegistry;
+import com.github.dimitryivaniuta.loansanalytics.LoansIngestionProperties;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedDefinition;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedName;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedRegistry;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -35,10 +35,10 @@ public class IngestionOrchestrator {
     private final LoansIngestionProperties props;
     private final FeedRegistry registry;
     private final FeedFileLocator fileLocator;
-    private final JobRunRepository jobRunRepository;
     private final PostgresCopyService copyService;
     private final SnapshotRepository snapshotRepository;
     private final DeltaRepository deltaRepository;
+    private final JobRunAuditService audit;
 
     @Transactional
     public UUID ingestAndGenerateDelta(LocalDate asOf) {
@@ -50,7 +50,7 @@ public class IngestionOrchestrator {
     public UUID ingestAndGenerateDelta(LocalDate asOf, Set<FeedName> feeds) {
         UUID runId = UUID.randomUUID();
         Instant startedAt = Instant.now();
-        jobRunRepository.startRun(runId, asOf, startedAt);
+        audit.startRun(runId, asOf, startedAt);
 
         try {
             LocalDate prev = asOf.minusDays(1);
@@ -58,7 +58,7 @@ public class IngestionOrchestrator {
             for (FeedName fn : feeds) {
                 FeedDefinition feed = registry.get(fn);
                 Path file = fileLocator.locate(feed, asOf);
-                jobRunRepository.startFeed(runId, fn, Instant.now(), file.getFileName().toString());
+                audit.startFeed(runId, fn, Instant.now(), file.getFileName().toString());
 
                 try {
                     snapshotRepository.truncateStaging(runId, feed, asOf);
@@ -72,18 +72,18 @@ public class IngestionOrchestrator {
                     int delta = deltaRepository.generateDelta(runId, feed, asOf, prev);
 
                     snapshotRepository.deleteStaging(runId, feed);
-                    jobRunRepository.finishFeed(runId, fn, Instant.now(), "SUCCESS", staged, snap, delta, null);
+                    audit.finishFeed(runId, fn, Instant.now(), "SUCCESS", staged, snap, delta, null);
                 } catch (Exception e) {
                     log.error("Run {} feed {} failed", runId, fn, e);
-                    jobRunRepository.finishFeed(runId, fn, Instant.now(), "FAILED", null, null, null, e.getMessage());
+                    audit.finishFeed(runId, fn, Instant.now(), "FAILED", null, null, null, e.getMessage());
                     throw e;
                 }
             }
 
-            jobRunRepository.finishRun(runId, Instant.now(), "SUCCESS", null);
+            audit.finishRun(runId, Instant.now(), "SUCCESS", null);
             return runId;
         } catch (Exception e) {
-            jobRunRepository.finishRun(runId, Instant.now(), "FAILED", e.getMessage());
+            audit.finishRun(runId, Instant.now(), "FAILED", e.getMessage());
             throw e;
         }
     }

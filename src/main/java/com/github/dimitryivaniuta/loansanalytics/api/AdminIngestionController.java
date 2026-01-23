@@ -1,7 +1,7 @@
-package com.github.dzmitryivaniuta.loansanalytics.api;
+package com.github.dimitryivaniuta.loansanalytics.api;
 
-import com.github.dzmitryivaniuta.loansanalytics.ingest.IngestionOrchestrator;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedName;
+import com.github.dimitryivaniuta.loansanalytics.ingest.IngestionOrchestrator;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedName;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Map;

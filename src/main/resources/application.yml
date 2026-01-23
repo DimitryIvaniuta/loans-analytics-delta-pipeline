@@ -21,3 +21,18 @@ loans:
     input-dir: ./data
     cli-enabled: false
     enabled-feeds: ["LOAN_MASTER", "PAYMENT_TRANSACTION"]
+logging:
+  level:
+    root: INFO
+    org.flywaydb: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: ${LOG_SQL_LEVEL:WARN}
+    com.github.dimitryivaniuta.loansanalytics: DEBUG
+    org.springframework.graphql: DEBUG
+    org.springframework.jdbc.core: DEBUG
+    org.springframework.jdbc.support: DEBUG
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG
+    org.springframework.transaction: TRACE
+    org.springframework.dao: DEBUG
+    org.postgresql: DEBUG

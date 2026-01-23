@@ -1,7 +1,7 @@
-package com.github.dzmitryivaniuta.loansanalytics.api;
+package com.github.dimitryivaniuta.loansanalytics.api;
 
-import com.github.dzmitryivaniuta.loansanalytics.ingest.JobRunRepository;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.feed.FeedRegistry;
+import com.github.dimitryivaniuta.loansanalytics.ingest.JobRunRepository;
+import com.github.dimitryivaniuta.loansanalytics.ingest.feed.FeedRegistry;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.time.LocalDate;

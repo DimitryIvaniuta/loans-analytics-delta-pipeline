@@ -1,7 +1,7 @@
-package com.github.dzmitryivaniuta.loansanalytics.api;
+package com.github.dimitryivaniuta.loansanalytics.api;
 
-import com.github.dzmitryivaniuta.loansanalytics.ingest.DeltaRepository;
-import com.github.dzmitryivaniuta.loansanalytics.ingest.JobRunRepository;
+import com.github.dimitryivaniuta.loansanalytics.ingest.DeltaRepository;
+import com.github.dimitryivaniuta.loansanalytics.ingest.JobRunRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
