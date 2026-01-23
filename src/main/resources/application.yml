@@ -36,3 +36,9 @@ logging:
     org.springframework.transaction: TRACE
     org.springframework.dao: DEBUG
     org.postgresql: DEBUG
+app:
+  web:
+    cors:
+      allowed-origins:
+        - "http://localhost:5173"
+        - "http://localhost:3000"

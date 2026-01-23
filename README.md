@@ -110,3 +110,17 @@ Main flow:
 3) Run ingest
 4) List runs / Get run feeds
 5) Download delta CSV
+
+
+---
+
+## 📜 License
+
+MIT
+
+---
+
+## Contact
+
+**Dimitry Ivaniuta** — [dzmitry.ivaniuta.services@gmail.com](mailto:dzmitry.ivaniuta.services@gmail.com) — [GitHub](https://github.com/DimitryIvaniuta)
+
